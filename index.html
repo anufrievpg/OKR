@@ -1,403 +1,1062 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OKR — стратегические цели по картам департамента</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>OKR · стратегические цели по картам департамента — ЭНКО</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f6f4ef;
-      --ink: #1c1917;
-      --muted: #57534e;
-      --line: #d6d3d1;
-      --card: #fffcf7;
-      --accent: #1d4ed8;
+      --navy: #122A4B;
+      --navy-2: #1B4987;
+      --blue: #0072BC;
+      --gold: #CFC393;
+      --bg: #EAEFF2;
+      --bg-2: #F7F9FC;
+      --surface: #FFFFFF;
+      --line: #D5DEE8;
+      --text: #262626;
+      --muted: #758795;
+      --process: #0072BC;
+      --product: #1F8A70;
+      --eng: #5B6B8C;
+      --data: #B35C1E;
+      --lead: #1B4987;
+      --shadow: 0 10px 30px rgba(18, 42, 75, 0.08);
+      --shadow-lg: 0 18px 50px rgba(18, 42, 75, 0.12);
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html, body {
+      min-height: 100%;
+      min-height: 100dvh;
+    }
     body {
-      margin: 0;
-      font: 16px/1.5 "Segoe UI", system-ui, sans-serif;
-      color: var(--ink);
-      background: var(--bg);
+      font-family: Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(64,152,255,.18), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(207,195,147,.16), transparent 50%),
+        linear-gradient(180deg, #F4F7FA 0%, var(--bg) 100%);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100%;
+      min-height: 100dvh;
+    }
+    /* Desktop app shell: fixed viewport. On iPhone / Files preview height:100% + overflow:hidden даёт «пустой» экран. */
+    @media (min-width: 981px) and (hover: hover) and (pointer: fine) {
+      html, body { height: 100%; overflow: hidden; }
+      .app { height: 100%; min-height: 0; }
     }
     header {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
-      background: var(--card);
-      padding: 28px 20px 22px;
+      z-index: 20;
     }
-    main, header > div, footer > div {
-      max-width: 880px;
+    .brand { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+    .brand-mark {
+      width: 36px; height: 36px; display: block; flex: 0 0 auto;
+      border-radius: 9px; box-shadow: 0 1px 2px rgba(18,42,75,.12);
+    }
+    .brand-wordmark { height: 26px; width: auto; display: block; flex: 0 0 auto; }
+    .brand-text h1 {
+      font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--navy); line-height: 1.15;
+    }
+    .brand-text p { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+    .toolbar {
+      margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.5rem;
+      align-items: center; justify-content: flex-end;
+    }
+    .chip, .tool-btn {
+      border: 1px solid var(--line); background: var(--surface);
+      border-radius: 999px; font: inherit; color: var(--text);
+      padding: 0.45rem 0.85rem; cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; transition: .18s ease;
+    }
+    .chip:hover, .tool-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .chip.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .tool-btn.primary {
+      background: var(--navy); border-color: var(--navy); color: #fff;
+    }
+    .tool-btn.primary:hover { background: var(--navy-2); border-color: var(--navy-2); color: #fff; }
+
+    .main {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 0;
+    }
+    .side {
+      background: rgba(255,255,255,.92);
+      border-right: 1px solid var(--line);
+      overflow: auto;
+      padding: 1rem 0.75rem 1.5rem;
+    }
+    .side h2 {
+      font-size: 0.72rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); font-weight: 800; padding: 0 0.5rem 0.65rem;
+    }
+    .nav-btn {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      width: 100%; text-align: left; border: 0; background: transparent;
+      padding: 0.7rem 0.65rem; border-radius: 12px; cursor: pointer;
+      font: inherit; color: var(--text); transition: .15s ease;
+    }
+    .nav-btn:hover { background: #F0F5FA; }
+    .nav-btn.active { background: rgba(0,114,188,.1); color: var(--navy); }
+    .nav-num {
+      flex: 0 0 auto; width: 26px; height: 26px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: var(--bg); color: var(--navy); font-size: 0.72rem; font-weight: 800;
+    }
+    .nav-btn.active .nav-num { background: var(--navy); color: #fff; }
+    .nav-label { font-size: 0.86rem; font-weight: 700; line-height: 1.25; }
+    .nav-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.15rem; font-weight: 500; }
+
+    .stage {
+      position: relative;
+      overflow: auto;
+      min-height: 0;
+      padding: 1.25rem 1.5rem 2.5rem;
+    }
+    .panel {
+      display: none;
+      animation: fadeUp .35s ease;
+      max-width: 1180px;
       margin: 0 auto;
     }
-    h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; font-weight: 650; }
-    h2 { font-size: 20px; margin: 36px 0 12px; }
-    h3 { font-size: 18px; margin: 0 0 6px; }
-    p { margin: 0 0 8px; }
-    .lead, .why, .maps, header p, footer { color: var(--muted); }
-    .lead { margin-bottom: 0; }
-    nav {
-      display: flex;
-      gap: 16px;
-      margin-top: 16px;
-      font-size: 14px;
+    .panel.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
     }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin: 24px 0 8px;
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(16px) scale(.98); }
+      to { opacity: 1; transform: none; }
     }
-    .stat {
-      background: var(--card);
+    @keyframes pulseSoft {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,114,188,.25); }
+      50% { box-shadow: 0 0 0 10px rgba(0,114,188,0); }
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(18,42,75,.96) 0%, rgba(27,73,135,.92) 55%, rgba(0,114,188,.85) 100%),
+        radial-gradient(800px 400px at 90% 10%, rgba(207,195,147,.28), transparent 55%);
+      color: #fff;
+      padding: 2.4rem 2.2rem 2.1rem;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 1.25rem;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 18% 80%, rgba(255,255,255,.08), transparent 35%),
+        linear-gradient(90deg, transparent 60%, rgba(207,195,147,.08));
+      pointer-events: none;
+    }
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(255,255,255,.72);
+      margin-bottom: 1rem; position: relative; z-index: 1;
+    }
+    .hero-kicker span {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+      animation: pulseSoft 2.4s ease infinite;
+    }
+    .hero-brand {
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 800; letter-spacing: -.04em; line-height: .95;
+      position: relative; z-index: 1;
+    }
+    .hero-brand em {
+      font-style: normal; color: var(--gold);
+    }
+    .hero h2 {
+      margin-top: .85rem; font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      font-weight: 600; max-width: 42rem; line-height: 1.35;
+      color: rgba(255,255,255,.92); position: relative; z-index: 1;
+    }
+    .hero p {
+      margin-top: .75rem; max-width: 40rem; color: rgba(255,255,255,.72);
+      font-size: .95rem; line-height: 1.55; position: relative; z-index: 1;
+    }
+    .hero-cta {
+      display: flex; flex-wrap: wrap; gap: .6rem;
+      margin-top: 1.4rem; position: relative; z-index: 1;
+    }
+    .hero-cta .tool-btn {
+      background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.22); color: #fff;
+    }
+    .hero-cta .tool-btn:hover { background: #fff; color: var(--navy); border-color: #fff; }
+    .hero-cta .tool-btn.gold {
+      background: var(--gold); border-color: var(--gold); color: var(--navy);
+    }
+
+    .section-head {
+      display: flex; align-items: end; justify-content: space-between;
+      gap: 1rem; margin: 0 0 1rem; flex-wrap: wrap;
+    }
+    .section-head h2 {
+      font-size: 1.35rem; font-weight: 800; color: var(--navy); letter-spacing: -.02em;
+    }
+    .section-head p { color: var(--muted); font-size: .9rem; max-width: 36rem; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; }
+
+    .tile {
+      background: rgba(255,255,255,.94);
       border: 1px solid var(--line);
-      padding: 12px 14px;
+      border-radius: 18px;
+      padding: 1.1rem 1.15rem;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     }
-    .stat b { display: block; font-size: 22px; }
-    .stat span { color: var(--muted); font-size: 12px; }
-    .note {
+    .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: #c8d5e4; }
+    .tile .label {
+      font-size: .72rem; font-weight: 800; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .45rem;
+    }
+    .tile h3 { font-size: 1.05rem; font-weight: 800; color: var(--navy); margin-bottom: .4rem; }
+    .tile p, .tile li { font-size: .88rem; line-height: 1.5; color: #405061; }
+    .tile ul { padding-left: 1.05rem; }
+    .tile li + li { margin-top: .3rem; }
+
+    .letter-card {
+      text-align: center; padding: 1.2rem .8rem;
+      animation: floatIn .45s ease both;
+    }
+    .letter-card .letter {
+      width: 54px; height: 54px; margin: 0 auto .7rem;
+      border-radius: 16px; display: grid; place-items: center;
+      background: var(--navy); color: #fff;
+      font-size: 1.4rem; font-weight: 800;
+      box-shadow: 0 8px 20px rgba(18,42,75,.18);
+    }
+    .letter-card:nth-child(2) .letter { background: var(--blue); }
+    .letter-card:nth-child(3) .letter { background: var(--navy-2); }
+    .letter-card:nth-child(4) .letter { background: #3d6fa3; }
+    .letter-card:nth-child(5) .letter { background: #2a567f; }
+    .letter-card h3 { font-size: .95rem; margin-bottom: .35rem; }
+    .letter-card p { font-size: .8rem; }
+
+    .principle {
+      display: grid; grid-template-columns: 42px 1fr; gap: .85rem; align-items: start;
+    }
+    .principle .idx {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(0,114,188,.1); color: var(--blue);
+      display: grid; place-items: center; font-weight: 800;
+    }
+
+    .org-canvas-wrap {
+      background: rgba(255,255,255,.7);
       border: 1px solid var(--line);
-      background: var(--card);
-      padding: 12px 14px;
-      margin: 16px 0 8px;
-      font-size: 14px;
+      border-radius: 22px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      overflow: auto;
     }
-    .goal {
-      display: grid;
-      grid-template-columns: 48px 1fr;
-      gap: 12px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
+    .org-canvas {
+      position: relative;
+      min-width: 1080px;
+      min-height: 920px;
+      padding: 1rem;
     }
-    .num {
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      font-weight: 650;
-      padding-top: 3px;
+    .org-node {
+      position: absolute;
+      width: 210px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: .85rem .9rem;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      animation: floatIn .4s ease both;
     }
-    .maps { font-size: 13px; }
-    .why { font-size: 14px; }
+    .org-node:hover, .org-node.active {
+      transform: translateY(-3px);
+      border-color: var(--blue);
+      box-shadow: var(--shadow-lg);
+    }
+    .org-node .role {
+      font-size: .72rem; font-weight: 800; letter-spacing: .05em;
+      text-transform: uppercase; margin-bottom: .25rem;
+    }
+    .org-node .name { font-size: .92rem; font-weight: 800; color: var(--navy); }
+    .org-node .grade { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+    .org-node.lead { border-top: 4px solid var(--lead); width: 240px; }
+    .org-node.lead .role { color: var(--lead); }
+    .org-node.process { border-top: 4px solid var(--process); }
+    .org-node.process .role { color: var(--process); }
+    .org-node.product { border-top: 4px solid var(--product); }
+    .org-node.product .role { color: var(--product); }
+    .org-node.eng { border-top: 4px solid var(--eng); }
+    .org-node.eng .role { color: var(--eng); }
+    .org-node.data { border-top: 4px solid var(--data); }
+    .org-node.data .role { color: var(--data); }
+    .org-node.vacancy { border-style: dashed; opacity: .92; }
+    .org-node.vacancy .name { color: var(--data); }
+
+    .block-label {
+      position: absolute;
+      font-size: .7rem; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    .org-svg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    .person-detail {
+      margin-top: 1rem;
+      display: none;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow);
+      animation: fadeUp .3s ease;
+    }
+    .person-detail.open { display: block; }
+    .person-detail h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: .25rem; }
+    .person-detail .meta { color: var(--muted); font-size: .82rem; margin-bottom: .85rem; }
+    .person-detail .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .person-detail h4 {
+      font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .35rem;
+    }
+    .person-detail p, .person-detail li { font-size: .86rem; line-height: 1.5; color: #405061; }
+    .person-detail ul { padding-left: 1rem; }
+
+    .benefit .icon {
+      width: 40px; height: 40px; border-radius: 12px; margin-bottom: .7rem;
+      display: grid; place-items: center; font-weight: 800; color: #fff; font-size: .85rem;
+      background: var(--navy);
+    }
+    .benefit:nth-child(2) .icon { background: var(--blue); }
+    .benefit:nth-child(3) .icon { background: var(--product); }
+    .benefit:nth-child(4) .icon { background: var(--data); }
+    .benefit:nth-child(5) .icon { background: var(--navy-2); }
+
+    .goal-row {
+      display: grid; grid-template-columns: 1.3fr .9fr .8fr; gap: .75rem;
+      align-items: start; padding: .85rem 0; border-bottom: 1px solid var(--line);
+    }
+    .goal-row:last-child { border-bottom: 0; }
+    .goal-row strong { color: var(--navy); font-size: .9rem; }
+    .goal-row span { font-size: .82rem; color: #405061; line-height: 1.4; }
+    .pill {
+      display: inline-flex; align-items: center;
+      padding: .2rem .55rem; border-radius: 999px;
+      font-size: .72rem; font-weight: 700;
+      background: rgba(0,114,188,.1); color: var(--blue);
+    }
+    .pill.process { background: rgba(0,114,188,.1); color: var(--process); }
+    .pill.product { background: rgba(31,138,112,.12); color: var(--product); }
+    .pill.eng { background: rgba(91,107,140,.14); color: var(--eng); }
+    .pill.data { background: rgba(179,92,30,.12); color: var(--data); }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
     table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--card);
-      font-size: 13px;
+      width: 100%; border-collapse: collapse; min-width: 880px;
+      font-size: .8rem;
     }
     th, td {
-      border: 1px solid var(--line);
-      padding: 8px 10px;
-      text-align: left;
-      vertical-align: top;
+      padding: .7rem .65rem; border-bottom: 1px solid var(--line);
+      text-align: left; vertical-align: top;
     }
-    th { font-weight: 650; }
-    .core { color: var(--accent); font-weight: 650; }
-    details.map {
-      background: var(--card);
+    th {
+      background: #F3F6FA; color: var(--navy); font-weight: 800;
+      position: sticky; top: 0; z-index: 1;
+    }
+    tr:hover td { background: #F8FBFE; }
+    .raci {
+      display: inline-grid; place-items: center;
+      min-width: 28px; height: 24px; padding: 0 .35rem;
+      border-radius: 6px; font-weight: 800; font-size: .72rem;
+    }
+    .raci.A { background: rgba(18,42,75,.12); color: var(--navy); }
+    .raci.R { background: rgba(0,114,188,.14); color: var(--blue); }
+    .raci.C { background: rgba(31,138,112,.12); color: var(--product); }
+    .raci.I { background: #EEF2F6; color: var(--muted); }
+    .legend { display: flex; flex-wrap: wrap; gap: .55rem; margin: .85rem 0 1rem; }
+    .legend span {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .78rem; color: var(--muted); font-weight: 600;
+    }
+
+    .compare td:first-child { font-weight: 700; color: var(--navy); white-space: nowrap; }
+
+    .audience {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    }
+    .audience .tile { border-top: 4px solid var(--navy); }
+    .audience .tile:nth-child(2) { border-top-color: var(--blue); }
+    .audience .tile:nth-child(3) { border-top-color: var(--gold); }
+
+    .footer-note {
+      margin-top: 1.5rem; color: var(--muted); font-size: .78rem; text-align: center;
+    }
+    .calc-disclaimer {
+      margin-top: 1.1rem;
+      padding: .85rem 1rem;
+      border-top: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.45;
+      text-align: left;
+    }
+    .notice {
+      margin-bottom: 1rem; padding: .85rem 1rem;
+      border-radius: 14px; border: 1px solid rgba(179,92,30,.28);
+      background: rgba(179,92,30,.08); color: #6B3A12;
+      font-size: .86rem; line-height: 1.45;
+    }
+    .notice strong { color: var(--navy); }
+    .prio {
+      display: inline-flex; align-items: center;
+      padding: .12rem .45rem; border-radius: 6px;
+      font-size: .68rem; font-weight: 800; letter-spacing: .04em;
+    }
+    .prio.p0 { background: rgba(179,92,30,.16); color: var(--data); }
+    .prio.p1 { background: rgba(0,114,188,.14); color: var(--blue); }
+    .prio.p2 { background: rgba(91,107,140,.14); color: var(--eng); }
+    .prio.p3 { background: #EEF2F6; color: var(--muted); }
+    .init-row {
+      display: grid; grid-template-columns: 72px 1.4fr .9fr .85fr;
+      gap: .65rem; align-items: start;
+      padding: .75rem 0; border-bottom: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .init-row:last-child { border-bottom: none; }
+    .init-row .code { font-weight: 800; color: var(--navy); }
+    .init-row .sys { color: var(--muted); font-size: .78rem; margin-top: .15rem; }
+    .roadmap-q {
+      border-left: 3px solid var(--blue);
+      padding-left: .85rem; margin-bottom: 1.1rem;
+    }
+    .roadmap-q h4 {
+      margin: 0 0 .45rem; font-size: .92rem; color: var(--navy);
+    }
+    .zone-fn {
+      display: grid; grid-template-columns: 2rem 1fr; gap: .45rem .65rem;
+      font-size: .84rem; margin: .35rem 0;
+    }
+    .zone-fn .n {
+      font-weight: 800; color: var(--blue);
+    }
+    .zone-fn.vacancy-fn {
+      grid-template-columns: minmax(5.75rem, auto) 1fr;
+    }
+    .zone-fn.vacancy-fn .n {
+      white-space: nowrap;
+    }
+    .invest-card .money {
+      display: inline-flex; align-items: center;
+      margin-top: .65rem; padding: .25rem .6rem;
+      border-radius: 999px; background: rgba(207,195,147,.22);
+      color: var(--navy); font-size: .78rem; font-weight: 800;
+    }
+    .invest-card ul { margin-top: .55rem; }
+    .effect-hero {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; margin-bottom: 1.15rem;
+    }
+    .effect-total {
+      background:
+        linear-gradient(135deg, rgba(18,42,75,.96) 0%, rgba(27,73,135,.92) 55%, rgba(0,114,188,.85) 100%);
+      color: #fff; border-radius: 22px; padding: 1.5rem 1.4rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .effect-total .label { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; font-weight: 700; }
+    .effect-total .sum { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -.03em; margin: .35rem 0; }
+    .effect-total .sum em { font-style: normal; color: var(--gold); }
+    .effect-total p { color: rgba(255,255,255,.78); font-size: .9rem; line-height: 1.45; max-width: 28rem; }
+    .assumptions { display: grid; gap: .55rem; }
+    .assumptions li { font-size: .86rem; color: #405061; line-height: 1.45; }
+    .calc-block .formula {
+      margin-top: .55rem; padding: .65rem .75rem; border-radius: 12px;
+      background: #F3F6FA; color: var(--navy); font-size: .8rem; font-weight: 600; line-height: 1.4;
+    }
+    .calc-block .result {
+      margin-top: .55rem; font-size: .9rem; font-weight: 800; color: var(--navy);
+    }
+
+    .toast {
+      position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 50;
+      background: var(--navy); color: #fff; padding: .75rem 1rem;
+      border-radius: 12px; font-size: .85rem; font-weight: 600;
+      box-shadow: var(--shadow-lg); display: none;
+    }
+    .toast.show { display: block; animation: fadeUp .25s ease; }
+
+    @media screen {
+      .print-person-list,
+      #panel-org-profiles { display: none !important; }
+    }
+    .print-people-title {
+      font-size: 1rem;
+      color: var(--navy);
+      margin: 1.25rem 0 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .person-print-card {
+      margin-top: 1rem;
+      background: #fff;
       border: 1px solid var(--line);
-      margin: 0 0 8px;
+      border-radius: 18px;
+      padding: 1.15rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .person-print-card h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: .25rem; }
+    .person-print-card .meta { color: var(--muted); font-size: .82rem; margin-bottom: .85rem; }
+    .person-print-card .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .person-print-card h4 {
+      font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .35rem;
+    }
+    .person-print-card p { font-size: .86rem; line-height: 1.5; color: #405061; }
+
+    @media print {
+      @page { size: A4 landscape; margin: 10mm 12mm; }
+      html, body, .app, .main, .stage {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .app { display: block !important; }
+      .side, .toolbar, .toast { display: none !important; }
+      header {
+        position: static !important;
+        background: rgba(255,255,255,.86) !important;
+        backdrop-filter: none !important;
+        border-bottom: 1px solid var(--line) !important;
+        padding: 0.85rem 1.25rem !important;
+        margin-bottom: 1rem;
+        page-break-after: avoid;
+      }
+      .main { display: block !important; grid-template-columns: 1fr !important; }
+      .stage {
+        overflow: visible !important;
+        padding: 1.25rem 1.5rem 2.5rem !important;
+        max-height: none !important;
+      }
+      body.print-all .panel {
+        display: block !important;
+        visibility: visible !important;
+        max-width: 1180px !important;
+        margin: 0 auto 0 !important;
+        page-break-before: always;
+        break-before: page;
+        page-break-inside: auto;
+        break-inside: auto;
+        overflow: visible !important;
+      }
+      body.print-all .panel.print-fit-page {
+        page-break-inside: avoid;
+        break-inside: avoid-page;
+        overflow: hidden !important;
+      }
+      body.print-all .panel#panel-vacancies,
+      body.print-all .panel#panel-ecosystem,
+      body.print-all .panel#panel-org-profiles {
+        page-break-before: always;
+        break-before: page;
+        margin-top: 0 !important;
+      }
+      .grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
+      .grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      .grid-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      .grid-5 { grid-template-columns: repeat(5, 1fr) !important; }
+      .effect-hero { grid-template-columns: 1.2fr 1fr !important; }
+      .person-detail .cols { grid-template-columns: 1fr 1fr !important; }
+      .person-print-card .cols { grid-template-columns: 1fr 1fr !important; }
+      .goal-row { grid-template-columns: 1.3fr .9fr .8fr !important; }
+      .init-row { grid-template-columns: 72px 1.4fr .9fr .85fr !important; }
+      .tool-btn, .chip { display: none !important; }
+      .table-wrap { max-height: none !important; overflow: visible !important; }
+      .org-canvas-wrap { overflow: visible !important; }
+      .org-canvas {
+        min-width: 1080px !important;
+        min-height: 920px !important;
+        height: auto !important;
+      }
+      body.print-all .panel.print-fit-page .org-canvas {
+        transform: none !important;
+      }
+      .org-node { cursor: default; }
+      .org-node:hover { transform: none !important; }
+      #personDetail { display: none !important; }
+      .print-person-list,
+      #panel-org-profiles {
+        display: block !important;
+        visibility: visible !important;
+        height: auto !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+      }
+
+      /* Не резать карточки/блоки между страницами — переносить целиком */
+      .hero,
+      .tile,
+      .notice,
+      .section-head,
+      .letter-card,
+      .principle,
+      .benefit,
+      .org-canvas-wrap,
+      .person-print-card,
+      .print-person-list .person-print-card,
+      .invest-card,
+      .effect-total,
+      .effect-hero,
+      .calc-block,
+      .roadmap-q,
+      .init-row,
+      .goal-row,
+      .table-wrap,
+      .audience > .tile,
+      .grid-2 > .tile,
+      .grid-3 > .tile,
+      .grid-4 > .tile,
+      .grid-5 > .tile {
+        page-break-inside: avoid !important;
+        break-inside: avoid-page !important;
+        -webkit-column-break-inside: avoid !important;
+      }
+      /* Chrome лучше уважает break-inside у block, чем у grid-item */
+      body.print-all .panel.print-multipage .grid-2,
+      body.print-all .panel.print-multipage .grid-3,
+      body.print-all .panel.print-multipage .grid-4,
+      body.print-all .panel.print-multipage .grid-5,
+      body.print-all .panel.print-multipage .audience,
+      body.print-all .panel.print-multipage .effect-hero {
+        display: block !important;
+      }
+      body.print-all .panel.print-multipage .grid-2 > .tile,
+      body.print-all .panel.print-multipage .grid-3 > .tile,
+      body.print-all .panel.print-multipage .grid-4 > .tile,
+      body.print-all .panel.print-multipage .grid-5 > .tile,
+      body.print-all .panel.print-multipage .audience > .tile {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 0.75rem;
+      }
+      .section-head {
+        page-break-after: avoid;
+        break-after: avoid-page;
+      }
+      .person-print-card {
+        display: block !important;
+        visibility: visible !important;
+        margin-bottom: 1rem;
+      }
+    }
+
+
+
+    @media (max-width: 980px) {
+      .app { height: auto; min-height: 100%; min-height: 100dvh; }
+      .main { grid-template-columns: 1fr; }
+      .side {
+        display: flex; gap: .35rem; overflow-x: auto; white-space: nowrap;
+        border-right: 0; border-bottom: 1px solid var(--line);
+        padding: .75rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .side h2 { display: none; }
+      .nav-btn { width: auto; white-space: normal; min-width: 150px; }
+      .nav-sub { display: none; }
+      .grid-3, .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      header { flex-wrap: wrap; }
+      .toolbar { margin-left: 0; width: 100%; }
+      .brand-wordmark { display: none; }
+      table { min-width: 720px; font-size: .74rem; }
+      th, td { padding: .55rem .45rem; }
+      .stage { overflow: visible; }
+      .table-wrap { -webkit-overflow-scrolling: touch; }
+    }
+    details.map {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px;
+      margin: 0 0 .65rem; box-shadow: var(--shadow);
     }
     details.map > summary {
-      cursor: pointer;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+      cursor: pointer; padding: 1rem 1.1rem;
+      display: flex; flex-direction: column; gap: .2rem;
+      font-weight: 800; color: var(--navy);
     }
-    details.map > summary span { color: var(--muted); font-size: 12px; }
-    .map-body { padding: 0 14px 12px; }
-    details.branch { margin: 0 0 6px; }
-    details.branch > summary { cursor: pointer; padding: 4px 0; font-weight: 600; }
-    ul { margin: 4px 0 10px 18px; padding: 0; }
-    li { margin: 0 0 4px; }
-    .leaf { margin: 0 0 8px; }
-    footer { padding: 28px 20px 40px; font-size: 13px; }
-    @media (max-width: 720px) {
-      .stats { grid-template-columns: 1fr 1fr; }
-      .goal { grid-template-columns: 1fr; }
+    details.map > summary span { color: var(--muted); font-size: .75rem; font-weight: 600; }
+    .map-body { padding: 0 1.1rem 1rem; }
+    details.branch { margin: 0 0 .45rem; }
+    details.branch > summary { cursor: pointer; padding: .35rem 0; font-weight: 700; color: var(--navy); }
+    a.tool-btn { display: inline-flex; align-items: center; text-decoration: none; }
+    .map-body ul { padding-left: 1.1rem; margin: .35rem 0 .7rem; }
+    .map-body li { font-size: .86rem; color: #405061; margin: 0 0 .3rem; }
+    .core { color: var(--blue); font-weight: 800; }
+    a.ext { color: var(--blue); font-weight: 700; text-decoration: none; }
+    a.ext:hover { text-decoration: underline; }
+    .notice {
+      background: rgba(207,195,147,.18); border: 1px solid rgba(207,195,147,.55);
+      border-radius: 16px; padding: 1rem 1.1rem; color: #405061; font-size: .9rem;
+      margin-bottom: 1.1rem;
     }
+
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>Стратегические цели по картам департамента</h1>
-      <p class="lead">Каскад снизу вверх по шести картам из MM: что компания получает, если программы ДИТ, HR и проектного офиса будут выполнены.</p>
-      <nav>
-        <a href="#goals">Цели компании</a>
-        <a href="#matrix">Матрица покрытия</a>
-        <a href="#maps">Исходные карты</a>
-        <a href="https://github.com/anufrievpg/OKR">Репозиторий</a>
-      </nav>
-    </div>
-  </header>
-  <main>
-    <div class="stats">
-      <div class="stat"><b>8</b><span>стратегических целей</span></div>
-      <div class="stat"><b>6</b><span>карт департамента</span></div>
-      <div class="stat"><b>0,43 млрд</b><span>подписанный бюджет программ</span></div>
-      <div class="stat"><b>3</b><span>цели с ядром стройка + PM</span></div>
-    </div>
-    <div class="note">
-      Карты не заменяют рыночную стратегию (продажи, география, продукт ЖК). Они дают операционный контур, без которого эту стратегию нельзя стабильно исполнять.
-    </div>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <img class="brand-mark" src="assets/enco-mark.png" width="36" height="36" alt="ЭНКО" />
+        <img class="brand-wordmark" src="assets/enco-logo.svg" alt="ЭНКО" />
+        <div class="brand-text">
+          <h1>OKR</h1>
+          <p>Стратегические цели по картам департамента</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <button class="chip active" data-jump="overview">Обзор</button>
+        <button class="chip" data-jump="goals">Цели</button>
+        <button class="chip" data-jump="matrix">Матрица</button>
+        <button class="chip" data-jump="ddd">Карты</button>
+        <a class="tool-btn" href="https://github.com/anufrievpg/OKR">Репозиторий</a>
+      </div>
+    </header>
 
-    <h2 id="goals">Восемь целей компании</h2>
-    
-    <article class="goal">
-      <div class="num">01</div>
-      <div>
-        <h3>Проекты в срок и в бюджет</h3>
-        <p class="maps">Ядро: PM, Embedded · Вклад: DDD</p>
-        <p>Девелоперский портфель закрывается по графику и лимиту: сроки ИРД, ПД/РД, СМР и ввода предсказуемы, отклонения видны до факта срыва.</p>
-        <p class="why">Прямо зафиксировано в картах PM как целевой эффект системного проектного управления; стройка и данные дают рычаг контроля план/факт.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">02</div>
-      <div>
-        <h3>Управляемый полный цикл девелопмента</h3>
-        <p class="maps">Ядро: Embedded, PM · Вклад: DDD, ESD</p>
-        <p>Компания работает как процессно-проектная модель: стратегия → проект → тендер → стройка → приёмка → ключи → продажи, без разрывов между функциями.</p>
-        <p class="why">Карта PM явно ставит процессно-проектную модель бизнеса; Embedded закрывает операционный контур стройки, закупок и документов.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">03</div>
-      <div>
-        <h3>Управление на данных, а не на отчётах из Excel</h3>
-        <p class="maps">Ядро: DDD · Вклад: PM, HRM, Embedded</p>
-        <p>Решения инвесткомитета, функций и HR принимаются по доверенным витринам: единая объектная модель, качество данных, связанная аналитика.</p>
-        <p class="why">Программа DDD (0,27 млрд) заточена под Data Driven; PM и HRM требуют той же достоверности для портфеля и ФОТ.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">04</div>
-      <div>
-        <h3>Масштаб как единый контур ЭНКО</h3>
-        <p class="maps">Ядро: ESD · Вклад: Embedded, HRM, DDD, ИБ, PM</p>
-        <p>Новые юрлица, объекты и периметр Инстеп входят в те же стандарты IT, ИБ, HR и проектного управления — без роста OPEX смешанных сред.</p>
-        <p class="why">ESD прямо ставит интеграцию Инстеп в контур управления ЭНКО; HRM подключает новые компании в TMS; Embedded тиражирует УСО на объекты.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">05</div>
-      <div>
-        <h3>Себестоимость и подрядные риски под контролем</h3>
-        <p class="maps">Ядро: Embedded · Вклад: PM, DDD</p>
-        <p>Закупки, поставки и проектирование дают меньше потерь: рейтинг подрядчиков, качественная ПД/РД, лимиты бюджета, единая платформа снабжения.</p>
-        <p class="why">Embedded закрывает стройку, закупки и качество документации подрядчиков; PM добавляет графики закупок и независимый факторный анализ.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">06</div>
-      <div>
-        <h3>Люди и компетенции под стратегические задачи</h3>
-        <p class="maps">Ядро: HRM · Вклад: PM, ESD</p>
-        <p>Компания привлекает, адаптирует и удерживает людей; мотивация, грейды и обучение связаны со стратегией, а не живут отдельно от проектов.</p>
-        <p class="why">HRM (0,02 млрд) целиком про систему управления персоналом; PM требует обучения ПУ и мотивации участников в привязке к целям проекта.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">07</div>
-      <div>
-        <h3>Защита активов, ПДн и непрерывность</h3>
-        <p class="maps">Ядро: ИБ · Вклад: ESD, HRM</p>
-        <p>Утечка данных, простой инфраструктуры и претензии регуляторов не останавливают стройку, продажи и контур управления.</p>
-        <p class="why">Карта ИБ — институт защиты и восстановления; ESD даёт безопасный контур коммуникаций; HRM закрывает охрану труда и кадровый комплаенс.</p>
-      </div>
-    </article>
-    <article class="goal">
-      <div class="num">08</div>
-      <div>
-        <h3>Единое цифровое рабочее место</h3>
-        <p class="maps">Ядро: ESD, HRM · Вклад: Embedded, ИБ</p>
-        <p>Сотрудник работает в одном контуре: почта, календарь, мессенджер, портал, HelpDesk, ЭДО — с понятным SLA поддержки.</p>
-        <p class="why">ESD строит внутреннее информационное пространство и трансформацию ИТ-поддержки; HRM — портал как центр притяжения; Embedded — документы.</p>
-      </div>
-    </article>
+    <div class="main">
+      <aside class="side">
+        <h2>Разделы</h2>
+        <button class="nav-btn active" data-panel="overview">
+          <span class="nav-num">00</span>
+          <span><div class="nav-label">Обзор</div><div class="nav-sub">Каскад снизу вверх</div></span>
+        </button>
+        <button class="nav-btn" data-panel="goals">
+          <span class="nav-num">01</span>
+          <span><div class="nav-label">Восемь целей</div><div class="nav-sub">Что получает компания</div></span>
+        </button>
+        <button class="nav-btn" data-panel="matrix">
+          <span class="nav-num">02</span>
+          <span><div class="nav-label">Матрица покрытия</div><div class="nav-sub">Цель × карта</div></span>
+        </button>
+        <button class="nav-btn" data-panel="ddd">
+          <span class="nav-num">03</span>
+          <span><div class="nav-label">Data Driven Design</div><div class="nav-sub">`Data Driven Design (0,27 млрд).xmind`</div></span>
+        </button>
+        <button class="nav-btn" data-panel="ess">
+          <span class="nav-num">04</span>
+          <span><div class="nav-label">Embedded Software System</div><div class="nav-sub">`Embedded Software System (0,14 млрд).xmind`</div></span>
+        </button>
+        <button class="nav-btn" data-panel="esd">
+          <span class="nav-num">05</span>
+          <span><div class="nav-label">Enterprise Service Desk</div><div class="nav-sub">`Enterprise Service Desk.xmind`</div></span>
+        </button>
+        <button class="nav-btn" data-panel="hrm">
+          <span class="nav-num">06</span>
+          <span><div class="nav-label">HRM</div><div class="nav-sub">`HRM (0.02 млрд).xmind`</div></span>
+        </button>
+        <button class="nav-btn" data-panel="is">
+          <span class="nav-num">07</span>
+          <span><div class="nav-label">Information Security</div><div class="nav-sub">`Information Security.xmind`</div></span>
+        </button>
+        <button class="nav-btn" data-panel="pm">
+          <span class="nav-num">08</span>
+          <span><div class="nav-label">Project Management</div><div class="nav-sub">`PM.xmind`, `Project Management new.mmap`, `Proj</div></span>
+        </button>
+      </aside>
 
-    <h2 id="matrix">Матрица покрытия</h2>
-    <p class="why">Ядро — ведущая программа. Вклад — необходимый контур.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Цель</th>
-          <th>DDD</th>
-          <th>Embedded</th>
-          <th>ESD</th>
-          <th>HRM</th>
-          <th>ИБ</th>
-          <th>PM</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Проекты в срок и в бюджет</td><td>Вклад</td><td class="core">Ядро</td><td></td><td></td><td></td><td class="core">Ядро</td></tr>
-        <tr><td>Полный цикл девелопмента</td><td>Вклад</td><td class="core">Ядро</td><td>Вклад</td><td></td><td></td><td class="core">Ядро</td></tr>
-        <tr><td>Управление на данных</td><td class="core">Ядро</td><td>Вклад</td><td></td><td>Вклад</td><td></td><td>Вклад</td></tr>
-        <tr><td>Единый контур ЭНКО</td><td>Вклад</td><td>Вклад</td><td class="core">Ядро</td><td>Вклад</td><td>Вклад</td><td>Вклад</td></tr>
-        <tr><td>Себестоимость и подрядчики</td><td>Вклад</td><td class="core">Ядро</td><td></td><td></td><td></td><td>Вклад</td></tr>
-        <tr><td>Люди и компетенции</td><td></td><td></td><td>Вклад</td><td class="core">Ядро</td><td></td><td>Вклад</td></tr>
-        <tr><td>Защита и непрерывность</td><td></td><td></td><td>Вклад</td><td>Вклад</td><td class="core">Ядро</td><td></td></tr>
-        <tr><td>Цифровое рабочее место</td><td></td><td>Вклад</td><td class="core">Ядро</td><td class="core">Ядро</td><td>Вклад</td><td></td></tr>
-      </tbody>
-    </table>
+      <main class="stage">
+        <section class="panel active" id="panel-overview">
+          <div class="hero">
+            <div class="hero-kicker"><span></span> ЭНКО · карты целей департамента</div>
+            <div class="hero-brand">OK<em>R</em></div>
+            <h2>Стратегические цели, которые закрывают программы ДИТ, HR и проектного офиса</h2>
+            <p>Каскад снизу вверх по шести картам из MM: что компания получает, если эти программы будут выполнены. Это операционный контур стратегии, а не рыночная стратегия продаж.</p>
+            <div class="hero-cta">
+              <button class="tool-btn gold" data-panel="goals">Смотреть цели →</button>
+              <button class="tool-btn" data-panel="matrix">Матрица покрытия</button>
+              <button class="tool-btn" data-panel="ddd">Исходные карты</button>
+            </div>
+          </div>
+          <div class="grid-4">
+            <article class="tile"><div class="label">Цели</div><h3>8</h3><p>стратегических эффектов компании</p></article>
+            <article class="tile"><div class="label">Карты</div><h3>6</h3><p>программ департамента в MM</p></article>
+            <article class="tile"><div class="label">Бюджет</div><h3>0,43 млрд</h3><p>подписанные программы DDD, Embedded, HRM</p></article>
+            <article class="tile"><div class="label">Ядро</div><h3>3</h3><p>цели держат стройка и проектный офис</p></article>
+          </div>
+        </section>
 
-    <h2 id="maps">Исходные карты целей</h2>
-    <p class="why">Формулировки из карт департамента, уровни 1–2. Раскройте карту, затем ветку.</p>
-    
-    <details class="map">
-      <summary>
-        <strong>Data Driven Design (0,27 млрд)</strong>
-        <span>`Data Driven Design (0,27 млрд).xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Формирование корпоративной архитектуры данных</summary>
-          <ul><li>Сформировать потребности функциональных подразделений к ИТ, содержащие: Требования к качеству поддержки · ещё 3</li><li>Сформировать портфель ИТ-проектов с целевыми сроками и необходимым бюджетом для достижения стратегических целей · ещё 4</li><li>Внедрить Common Data Environment · ещё 5</li><li>Внедрение MDM системы · ещё 8</li><li>Внедрение корпоративной сервисной шины (ESB) · ещё 5</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Развитие корпоративной системы стратегического анализа и DDM</summary>
-          <ul><li>Развертывание решений (ТехАудит)</li><li>Внедрение инструментов Data Quality</li><li>Интеграция API ЕИСЖС (Наш.Дом.РФ)</li><li>Парсеры собственной разработки</li><li>Создание единой сети сбора данных за счет распределенной сети внешних контрагентов</li><li>Привлечение внешних партнеров для сбора данных</li><li>Интеграция по API c партнерами (E-софт, DataFlat, обьектив)</li><li>Поставка данных из внутренних источников</li><li>Внедрение инструментов для работы с неструктурированными данными</li><li>Внедрение инструментов для работы с неструктурированными данными</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Формирование дашбордов</summary>
-          <ul><li>В интересах функций</li><li>Формирование дашбордов, для LEAN</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Внедрение Data Driven подхода для принятия управленческих решений на основе данных, повышение точности прогнозирования, выявление точек роста (Гаврина А.С.)</summary>
-          <ul><li>Для внедрения Data Driven подхода для принятия управленческих решений на основе данных необходимо обеспечить сотрудников компании аналитическими отчетами по основным бизнес доменам · ещё 3</li><li>Для внедрения Data Driven подхода необходимо построить единую объектную модель данных · ещё 5</li><li>Для внедрения Data Driven подхода необходимо описать и систематизировать данные по объектам управления из всех источников · ещё 4</li><li>Для внедрения Data Driven подхода необходимо определить, где и как будут храниться получаемые данные по объектам управления · ещё 2</li><li>Для внедрения Data Driven подхода необходимо настроить сбор и обновление данных</li><li>Для внедрения Data Driven подхода для принятия управленческих решений на основе данных необходимо обеспечить качество этих данных · ещё 5</li><li>Для внедрения Data Driven подхода необходимо спроектировать целевое дерево (набор) аналитик, принципов их расчета и связанности</li><li>Для внедрения Data Driven подхода необходимо определить единый подход к визуализации данных · ещё 2</li><li>Для внедрения Data Driven подхода и формирования доверия к данным необходимо обеспечить контроль, прозрачность и ответственность за данные · ещё 3</li><li>Для внедрения Data Driven подхода необходимо развивать аналитическую культуру в компании · ещё 2</li></ul>
-        </details></div>
-    </details>
-    <details class="map">
-      <summary>
-        <strong>Embedded Software System (0,14 млрд)</strong>
-        <span>`Embedded Software System (0,14 млрд).xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Выстроен единый центр делопроизводства, который отвечает за бумажный и ЭДО документооборот компании</summary>
-          <ul><li>Все виды документов, шаблонов и сценарии обработки документов стандартизированы для более структурированного и эффективного подхода к работе с документами</li><li>По каждому НСИ закреплен ответственный держатель</li><li>Вся входящая корреспонденция обрабатывается специалистами центра делопроизводства и направляется по конкретному маршруту</li><li>Исходящая корреспонденция формируется ответственным лицом в зависимости от вида документа и отправлятся по конкретному маршруту</li><li>Выстроен процесс контрольных процедур</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Внедрена система документооборота и коммуникации с подрядчиками по направлению проектирования (риск-менеджмент &amp; форензик - диагностика)</summary>
-          <ul><li>Проведен анализ взаимоотношений с проектировщиками, зафиксированы ключевые проблемы, слабые стороны (заказчик/проектировщик)</li><li>Тендерная процедуру определена и оптимизирована на всех этапах проектирования.</li><li>Договор на проектирование доведен до совершенства, учтены все риски</li><li>Внедрены контрольные процедуры по контрольным точкам КСМ ( срез объема выполненных работ проектировщиком/заказчиком)</li><li>За каждый проект на всех его циклах ПД, РД ... закреплен один менеджер</li><li>Разработана и внедрена система рейтингов для подрядчиков</li><li>Мы получаем только качественную документацию (ПД и РД) от проектировщиков подрядной организации Заказчик: Солдатенко · ещё 5</li><li>Отправка согласованной ПД и РД строительному подрячику по ЭДО (Диадок) Заказчик: Иванов · ещё 1</li><li>Внедрить систему оценки, мотивации и отчетности для подрядчиков</li><li>Разработать систему оценки подрядчиков для формирования рейтинга</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Внедрить инструмент автоматизированного планирования и обмена данными для внутренних и внешних стейкхолдеров</summary>
-          <ul><li>Выбрать целевое решение и составить план внедрения и интеграции</li><li>Закупка лицензий и установка</li><li>Предоставить требования ИТ службе для составления перечня потенциальных решений</li><li>Провести обучение персонала</li><li>Протестировать возможные решения</li><li>Реализовать интеграцию со смежными ИТ-решениями</li><li>Составить перечень решений</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Выстроено управление бизнес-процессами строительства жилых комплексов &quot;Embedded Software&quot; (Левинов М.О.)</summary>
-          <ul><li>Развитие системы управление строительными организациями · ещё 17</li><li>Проведена диагностика и аудит бизнес-процессов Описаны и согласованы требования заказчиков Все заинтересованные стороны понимают, что будет реализовано. · ещё 3</li><li>Определено и утверждено программное решение, проведена его доработка, подготовлена инфраструктура для внедрения. · ещё 3</li><li>Конфигурация адаптирована под специфику девелопмента полного цикла. Все объекты настроены под бизнес-процессы · ещё 13</li><li>Все необходимые данные корректно настроены в системах · ещё 5</li><li>Пользователи уверенно работают с системой, получена обратная связь для улучшений · ещё 5</li><li>Система автоматизации строительства используется во всех релевантных подразделениях, процессы стали прозрачными, управляемыми и эффективными, пользователи получают поддержку и обновления. · ещё 3</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Цифровизация закупок и поставок</summary>
-          <ul><li>Внедрение единой ИТ-платформы для закупок · ещё 5</li></ul>
-        </details></div>
-    </details>
-    <details class="map">
-      <summary>
-        <strong>Enterprise Service Desk</strong>
-        <span>`Enterprise Service Desk.xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Трансформация ИТ-поддержки</summary>
-          <ul><li>Выделить 3 внутренние линии поддержки, сформировать структуру Отдела тех поддержки</li><li>Определиться с провайдером для 4 линии, включая оценку целесообразности с учетом стоимости</li><li>Доработать систему категоризации заявок и функционал портала для их автоматизации распределения</li><li>Разработать систему приоритизации обращений с формализованными критериями, в т.ч. с оценкой рисков, объемом необходимых ресурсов</li><li>Обучить всех сотрудников использованию портала ИТ-поддержки</li><li>Нанять необходимое количество специалистов и закупить необходимое оборудование и лицензии для обеспечения эффективной ИТ-поддержки</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Организовано внутреннее информационное пространство, обеспечивающее эффективные и безопасные коммуникации между сотрудниками (Кулибиба А.С.)</summary>
-          <ul><li>Почта, календарь и деловая переписка с партнёрами и контрагентами · ещё 4</li><li>Передача больших объёмов данных внешним партнёрам и контрагентам · ещё 4</li><li>Голосовая связь, не зависящая от компьютера · ещё 4</li><li>Массовые аудио- и видеовстречи · ещё 3</li><li>Информационный портал со справочной информацией о сотрудниках · ещё 2</li><li>Корпоративный мессенджер: текст, файлы, видео · ещё 4</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Интеграция &quot;Инстеп&quot; в единый контур управления ЭНКО (Четыркин Иван)</summary>
-          <ul><li>Расширена ресурсная база ИТ за счёт интеграции в единый контур управления ДИТ ИТ подразделения ИНСТЕП · ещё 2</li><li>ИТ-инфраструктура ИНСТЕП интегрирована в единую ИТ-инфраструктуру компании для обеспечения единых стандартов ИТ и ИБ и минимизации операционных расходов на поддержание смешанных сред · ещё 3</li><li>Организован общий безопасный контур коммуникаций, соответствующий стандартам компании · ещё 3</li><li>Пользователи работают в единых системах в рамках общих бизнес-процессов и функций для повышения операционной эффективности и минимизации ошибок, связанных с синхронизацией данных между системами · ещё 4</li></ul>
-        </details></div>
-    </details>
-    <details class="map">
-      <summary>
-        <strong>HRM (0.02 млрд)</strong>
-        <span>`HRM (0.02 млрд).xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Развитие корпоративного портала</summary>
-          <ul><li>Разработка модуля &quot;Банк идей&quot;</li><li>Разработка модуля &quot;Модуль опросов&quot;</li><li>Развертывание Talant Management System Websoft, интеграция части функциональности с корп порталом</li><li>Наполнение Talant Management System матрицами компетенций, knowledge base и тренингами</li><li>Внедрение КЭДО</li><li>Разработка автоматизированной таблицы ФОТ</li><li>Разработать и внедрить Модули: управления проектами, time sheets</li><li>Интеграция с ChatGPT</li><li>Разработка Мобильного приложения</li><li>Вывод продукта на коммерческий рынок</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Построена система управления персоналом, которая позволяет привлекать и удерживать сотрудников, создавать эффективную мотивированную и лояльную команду</summary>
-          <ul><li>Процессов привлечения, подбора и найма сотрудников · ещё 4</li><li>Процессов онбординга и адаптации сотрудников · ещё 3</li><li>Развивая корпоративную культуру компании и увеличивая вовлеченность сотрудников · ещё 4</li><li>Обучения и развития сотрудников · ещё 3</li><li>Процессов оценки эффективности сотрудников · ещё 4</li><li>Процессов укрепления бренда работодателя · ещё 3</li><li>Процессов оффбординга и высвобождения · ещё 4</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Принятие управленческих решений в HR-департаменте осуществляется на основе достоверных, объективных и чистых данных.</summary>
-          <ul><li>Принятие управленческих решений осуществляется на основе чистых данных через упрощение подготовки аналитических данных и формирование отчетности · ещё 3</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Построена система обеспечивающая эффекивное взаимодейтвие HR департамента с руководителями других подразделений</summary>
-          <ul><li>По вопросам планирования потребностей департаментов · ещё 2</li><li>Создания задач и целей для каждого сотрудника</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Построена современная система управления взаимодействиями с регуляторами</summary>
-          <ul><li>Ведения и учета трудовых книжек сотрудников</li><li>Ведения кадрового учета</li><li>Ведения архива документов</li><li>Ведения воинского учета</li></ul>
-        </details><p class='leaf'>Построена современная система управления взаимодействиями с кадровыми агентствами</p>
-        <details class="branch">
-          <summary>Выстроено управление функции охраны труда (Никитина Екатерина) Заказчик:Романова Анастасия</summary>
-          <ul><li>Обеспечить исполнение требований регуляторов ,в части охраны труда · ещё 1</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Talant management system</summary>
-          <ul><li>Внедрение комплексной единой системы управления жизненным циклом сотрудника, где у каждого сотрудника и руководителя есть личный кабинет с набором функциональностей · ещё 10</li></ul>
-        </details></div>
-    </details>
-    <details class="map">
-      <summary>
-        <strong>Information Security</strong>
-        <span>`Information Security.xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Внедрить базовый институт обеспечения ИБ</summary>
-          <ul><li>Определить необходимое количество специалистов и бюджет для обеспечения Информационной Безопасности</li><li>Согласовать бюджет и ресурсы на инвестиционном комитете</li><li>Нанять ИТ специалистов</li><li>Разработать / актуализировать руководства, процедуры и стандарты по Информационной Безопасности для сотрудников</li><li>Разработать систему регулярного обучения Информационной Безопасности для всех сотрудников</li><li>Разработать матрицу рисков и план по их митигации</li><li>Согласовать на стратегическом уровне практику внешнего аудита</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Обеспечена защита от утечки конфиденциальных данных или причинение вреда ИТ инфраструктуре в результате преднамеренных или случайных действий внешних или внутренних нарушителей (Кулибаба А.С.)</summary>
-          <ul><li>Защита от внутренних нарушителей · ещё 5</li><li>Защита от внешних злоумышленников · ещё 3</li><li>Восстановление данных: резервное копирование и резервный ЦОД · ещё 2</li><li>Выполнение требований регуляторов по защите ПДн · ещё 5</li><li>Непрерывность управления изменениями в контуре ПДн</li></ul>
-        </details></div>
-    </details>
-    <details class="map">
-      <summary>
-        <strong>Project Management</strong>
-        <span>`PM.xmind`, `Project Management new.mmap`, `Project Management new.xmind`, `Project Management.mmap`, `Project Management.xmind`</span>
-      </summary>
-      <div class="map-body">
-        <details class="branch">
-          <summary>Разработать и внедрить систему проектного управления</summary>
-          <ul><li>Сформировать рабочие группы по проекта, обеспечить работу команд · ещё 7</li><li>Внедрить сквозную систему календарного планирования · ещё 8</li><li>Разработать и внедрить систему отчетности и мониторинга · ещё 13</li><li>Внедрение интегрированной отчетности · ещё 5</li><li>Разработка и внедрение системы управления проектными рисками · ещё 7</li><li>Провести обучение проектному управлению · ещё 2</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Формирование процессно-проектной модели бизнеса</summary>
-          <ul><li>Трансформация бизнес-процессов, переход с as is на to be/паллиатив · ещё 2</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Управление портфелем проектов (сначала формируем управление проектами потом идем в формирование проектов)</summary>
-          <ul><li>Обеспечить команду ресурсами - методолог проектного офиса</li><li>Разработать и внедрить процесс оценки и утверждения проекта</li><li>Разработать отчетность для отслеживания статуса реализации проектов и эффектов от реализованных проектов</li><li>Сформировать четкие критерии выбора и оценки ИТ-проекта</li><li>Сформировать план внедрения наиболее приоритетных внутренних ИТ-инструментов и процедур для повышения эффективности функциональных подразделений</li><li>Формирование модели проектного офиса ИТ</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Выстроен системный подход к управлению проектной деятельностью, который обеспечивает достижение целей проектов в установленные сроки и бюджет. (Колмакова Ольга)</summary>
-          <ul><li>Выстроен процесс управления инициализацией проектов · ещё 4</li><li>Выстроен процесс управления планированием проектов · ещё 5</li><li>Выстроены процессы управления исполнением и контролем · ещё 5</li><li>Выстроен процесс управления завершением проекта · ещё 5</li></ul>
-        </details>
-        <details class="branch">
-          <summary>Проектная деятельность автоматизирована (Кулибаба Александр)</summary>
-          <ul><li>Сформирован полный и согласованный перечень требований, отражающий реальные потребности пользователей и бизнес-процессов. Все заинтересованные стороны понимают, что будет реализовано. · ещё 3</li><li>Определено и утверждено программное решение, проведена его доработка (при необходимости), подготовлена инфраструктура для внедрения. · ещё 3</li><li>Система автоматизации проектного управления полностью настроена, интегрирована с другими корпоративными системами, обеспечен обмен данными. · ещё 5</li><li>Все необходимые данные корректно перенесены, пользователи имеют доступ к актуальной информации в новой системе. · ещё 3</li><li>Пользователи уверенно работают с системой, выявлены и устранены возможные проблемы на пилотных проектах, получена обратная связь для доработки. · ещё 4</li><li>Система автоматизации проектного управления используется во всех релевантных подразделениях, процессы стали прозрачными, управляемыми и эффективными, пользователи получают поддержку и обновления. · ещё 3</li></ul>
-        </details></div>
-    </details>
-  </main>
-  <footer>
-    <div>
-      Источник: карты в <a href="https://github.com/anufrievpg/OKR/tree/main/MM">MM/</a>. Это каскад снизу вверх, а не цитата утверждённой стратегии компании.
+        <section class="panel" id="panel-goals">
+          <div class="section-head">
+            <div>
+              <h2>Восемь целей компании</h2>
+              <p>Ядро стратегии, которое карты реально могут исполнить: срок/бюджет → полный цикл → данные для управления.</p>
+            </div>
+          </div>
+          <div class="notice">Карты не заменяют рост продаж, продуктовую стратегию ЖК и финансовую стратегию капитала. Они дают контур, без которого эту стратегию нельзя стабильно исполнять.</div>
+          <div class="grid-2">
+            <article class="tile">
+              <div class="label">01 · PM · Embedded</div>
+              <h3>Проекты в срок и в бюджет</h3>
+              <p>Девелоперский портфель закрывается по графику и лимиту: сроки ИРД, ПД/РД, СМР и ввода предсказуемы, отклонения видны до факта срыва.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: PM, Embedded · Вклад: DDD</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">02 · Embedded · PM</div>
+              <h3>Управляемый полный цикл</h3>
+              <p>Компания работает как процессно-проектная модель: стратегия → проект → тендер → стройка → приёмка → ключи → продажи.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: Embedded, PM · Вклад: DDD, ESD</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">03 · DDD</div>
+              <h3>Управление на данных</h3>
+              <p>Решения инвесткомитета, функций и HR принимаются по доверенным витринам: единая объектная модель и связанная аналитика.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: DDD · Вклад: PM, HRM, Embedded</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">04 · ESD</div>
+              <h3>Единый контур ЭНКО</h3>
+              <p>Новые юрлица, объекты и периметр Инстеп входят в те же стандарты IT, ИБ, HR и проектного управления.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: ESD · Вклад: Embedded, HRM, DDD, ИБ, PM</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">05 · Embedded</div>
+              <h3>Себестоимость и подрядчики</h3>
+              <p>Закупки, поставки и проектирование дают меньше потерь: рейтинг подрядчиков, качественная ПД/РД, лимиты бюджета.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: Embedded · Вклад: PM, DDD</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">06 · HRM</div>
+              <h3>Люди и компетенции</h3>
+              <p>Мотивация, грейды и обучение связаны со стратегией, а не живут отдельно от проектов.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: HRM · Вклад: PM, ESD</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">07 · ИБ</div>
+              <h3>Защита и непрерывность</h3>
+              <p>Утечка данных, простой инфраструктуры и претензии регуляторов не останавливают стройку и контур управления.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: ИБ · Вклад: ESD, HRM</span></p>
+            </article>
+            <article class="tile">
+              <div class="label">08 · ESD · HRM</div>
+              <h3>Цифровое рабочее место</h3>
+              <p>Почта, календарь, мессенджер, портал, HelpDesk и ЭДО — в одном контуре с понятным SLA.</p>
+              <p style="margin-top:.55rem"><span class="pill">Ядро: ESD, HRM · Вклад: Embedded, ИБ</span></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-matrix">
+          <div class="section-head">
+            <div>
+              <h2>Матрица покрытия</h2>
+              <p>Ядро — ведущая программа. Вклад — необходимый контур.</p>
+            </div>
+          </div>
+          <div class="legend">
+            <span><span class="raci A">Я</span> Ядро</span>
+            <span><span class="raci R">В</span> Вклад</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Цель</th><th>DDD</th><th>Embedded</th><th>ESD</th><th>HRM</th><th>ИБ</th><th>PM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Проекты в срок и в бюджет</td><td>Вклад</td><td class="core">Ядро</td><td></td><td></td><td></td><td class="core">Ядро</td></tr>
+                <tr><td>Полный цикл девелопмента</td><td>Вклад</td><td class="core">Ядро</td><td>Вклад</td><td></td><td></td><td class="core">Ядро</td></tr>
+                <tr><td>Управление на данных</td><td class="core">Ядро</td><td>Вклад</td><td></td><td>Вклад</td><td></td><td>Вклад</td></tr>
+                <tr><td>Единый контур ЭНКО</td><td>Вклад</td><td>Вклад</td><td class="core">Ядро</td><td>Вклад</td><td>Вклад</td><td>Вклад</td></tr>
+                <tr><td>Себестоимость и подрядчики</td><td>Вклад</td><td class="core">Ядро</td><td></td><td></td><td></td><td>Вклад</td></tr>
+                <tr><td>Люди и компетенции</td><td></td><td></td><td>Вклад</td><td class="core">Ядро</td><td></td><td>Вклад</td></tr>
+                <tr><td>Защита и непрерывность</td><td></td><td></td><td>Вклад</td><td>Вклад</td><td class="core">Ядро</td><td></td></tr>
+                <tr><td>Цифровое рабочее место</td><td></td><td>Вклад</td><td class="core">Ядро</td><td class="core">Ядро</td><td>Вклад</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-ddd">
+          <div class="section-head">
+            <div>
+              <h2>Data Driven Design (0,27 млрд)</h2>
+              <p>Исходная карта · `Data Driven Design (0,27 млрд).xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Формирование корпоративной архитектуры данных</summary>
+              <ul><li>Сформировать потребности функциональных подразделений к ИТ, содержащие: Требования к качеству поддержки · ещё 3</li><li>Сформировать портфель ИТ-проектов с целевыми сроками и необходимым бюджетом для достижения стратегических целей · ещё 4</li><li>Внедрить Common Data Environment · ещё 5</li><li>Внедрение MDM системы · ещё 8</li><li>Внедрение корпоративной сервисной шины (ESB) · ещё 5</li></ul>
+            </details>            <details class="branch">
+              <summary>Развитие корпоративной системы стратегического анализа и DDM</summary>
+              <ul><li>Развертывание решений (ТехАудит)</li><li>Внедрение инструментов Data Quality</li><li>Интеграция API ЕИСЖС (Наш.Дом.РФ)</li><li>Парсеры собственной разработки</li><li>Создание единой сети сбора данных за счет распределенной сети внешних контрагентов</li><li>Привлечение внешних партнеров для сбора данных</li><li>Интеграция по API c партнерами (E-софт, DataFlat, обьектив)</li><li>Поставка данных из внутренних источников</li><li>Внедрение инструментов для работы с неструктурированными данными</li><li>Внедрение инструментов для работы с неструктурированными данными</li></ul>
+            </details>            <details class="branch">
+              <summary>Формирование дашбордов</summary>
+              <ul><li>В интересах функций</li><li>Формирование дашбордов, для LEAN</li></ul>
+            </details>            <details class="branch">
+              <summary>Внедрение Data Driven подхода для принятия управленческих решений на основе данных, повышение точности прогнозирования, выявление точек роста (Гаврина А.С.)</summary>
+              <ul><li>Для внедрения Data Driven подхода для принятия управленческих решений на основе данных необходимо обеспечить сотрудников компании аналитическими отчетами по основным бизнес доменам · ещё 3</li><li>Для внедрения Data Driven подхода необходимо построить единую объектную модель данных · ещё 5</li><li>Для внедрения Data Driven подхода необходимо описать и систематизировать данные по объектам управления из всех источников · ещё 4</li><li>Для внедрения Data Driven подхода необходимо определить, где и как будут храниться получаемые данные по объектам управления · ещё 2</li><li>Для внедрения Data Driven подхода необходимо настроить сбор и обновление данных</li><li>Для внедрения Data Driven подхода для принятия управленческих решений на основе данных необходимо обеспечить качество этих данных · ещё 5</li><li>Для внедрения Data Driven подхода необходимо спроектировать целевое дерево (набор) аналитик, принципов их расчета и связанности</li><li>Для внедрения Data Driven подхода необходимо определить единый подход к визуализации данных · ещё 2</li><li>Для внедрения Data Driven подхода и формирования доверия к данным необходимо обеспечить контроль, прозрачность и ответственность за данные · ещё 3</li><li>Для внедрения Data Driven подхода необходимо развивать аналитическую культуру в компании · ещё 2</li></ul>
+            </details>
+        </section>        <section class="panel" id="panel-ess">
+          <div class="section-head">
+            <div>
+              <h2>Embedded Software System (0,14 млрд)</h2>
+              <p>Исходная карта · `Embedded Software System (0,14 млрд).xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Выстроен единый центр делопроизводства, который отвечает за бумажный и ЭДО документооборот компании</summary>
+              <ul><li>Все виды документов, шаблонов и сценарии обработки документов стандартизированы для более структурированного и эффективного подхода к работе с документами</li><li>По каждому НСИ закреплен ответственный держатель</li><li>Вся входящая корреспонденция обрабатывается специалистами центра делопроизводства и направляется по конкретному маршруту</li><li>Исходящая корреспонденция формируется ответственным лицом в зависимости от вида документа и отправлятся по конкретному маршруту</li><li>Выстроен процесс контрольных процедур</li></ul>
+            </details>            <details class="branch">
+              <summary>Внедрена система документооборота и коммуникации с подрядчиками по направлению проектирования (риск-менеджмент &amp; форензик - диагностика)</summary>
+              <ul><li>Проведен анализ взаимоотношений с проектировщиками, зафиксированы ключевые проблемы, слабые стороны (заказчик/проектировщик)</li><li>Тендерная процедуру определена и оптимизирована на всех этапах проектирования.</li><li>Договор на проектирование доведен до совершенства, учтены все риски</li><li>Внедрены контрольные процедуры по контрольным точкам КСМ ( срез объема выполненных работ проектировщиком/заказчиком)</li><li>За каждый проект на всех его циклах ПД, РД ... закреплен один менеджер</li><li>Разработана и внедрена система рейтингов для подрядчиков</li><li>Мы получаем только качественную документацию (ПД и РД) от проектировщиков подрядной организации Заказчик: Солдатенко · ещё 5</li><li>Отправка согласованной ПД и РД строительному подрячику по ЭДО (Диадок) Заказчик: Иванов · ещё 1</li><li>Внедрить систему оценки, мотивации и отчетности для подрядчиков</li><li>Разработать систему оценки подрядчиков для формирования рейтинга</li></ul>
+            </details>            <details class="branch">
+              <summary>Внедрить инструмент автоматизированного планирования и обмена данными для внутренних и внешних стейкхолдеров</summary>
+              <ul><li>Выбрать целевое решение и составить план внедрения и интеграции</li><li>Закупка лицензий и установка</li><li>Предоставить требования ИТ службе для составления перечня потенциальных решений</li><li>Провести обучение персонала</li><li>Протестировать возможные решения</li><li>Реализовать интеграцию со смежными ИТ-решениями</li><li>Составить перечень решений</li></ul>
+            </details>            <details class="branch">
+              <summary>Выстроено управление бизнес-процессами строительства жилых комплексов &quot;Embedded Software&quot; (Левинов М.О.)</summary>
+              <ul><li>Развитие системы управление строительными организациями · ещё 17</li><li>Проведена диагностика и аудит бизнес-процессов Описаны и согласованы требования заказчиков Все заинтересованные стороны понимают, что будет реализовано. · ещё 3</li><li>Определено и утверждено программное решение, проведена его доработка, подготовлена инфраструктура для внедрения. · ещё 3</li><li>Конфигурация адаптирована под специфику девелопмента полного цикла. Все объекты настроены под бизнес-процессы · ещё 13</li><li>Все необходимые данные корректно настроены в системах · ещё 5</li><li>Пользователи уверенно работают с системой, получена обратная связь для улучшений · ещё 5</li><li>Система автоматизации строительства используется во всех релевантных подразделениях, процессы стали прозрачными, управляемыми и эффективными, пользователи получают поддержку и обновления. · ещё 3</li></ul>
+            </details>            <details class="branch">
+              <summary>Цифровизация закупок и поставок</summary>
+              <ul><li>Внедрение единой ИТ-платформы для закупок · ещё 5</li></ul>
+            </details>
+        </section>        <section class="panel" id="panel-esd">
+          <div class="section-head">
+            <div>
+              <h2>Enterprise Service Desk</h2>
+              <p>Исходная карта · `Enterprise Service Desk.xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Трансформация ИТ-поддержки</summary>
+              <ul><li>Выделить 3 внутренние линии поддержки, сформировать структуру Отдела тех поддержки</li><li>Определиться с провайдером для 4 линии, включая оценку целесообразности с учетом стоимости</li><li>Доработать систему категоризации заявок и функционал портала для их автоматизации распределения</li><li>Разработать систему приоритизации обращений с формализованными критериями, в т.ч. с оценкой рисков, объемом необходимых ресурсов</li><li>Обучить всех сотрудников использованию портала ИТ-поддержки</li><li>Нанять необходимое количество специалистов и закупить необходимое оборудование и лицензии для обеспечения эффективной ИТ-поддержки</li></ul>
+            </details>            <details class="branch">
+              <summary>Организовано внутреннее информационное пространство, обеспечивающее эффективные и безопасные коммуникации между сотрудниками (Кулибиба А.С.)</summary>
+              <ul><li>Почта, календарь и деловая переписка с партнёрами и контрагентами · ещё 4</li><li>Передача больших объёмов данных внешним партнёрам и контрагентам · ещё 4</li><li>Голосовая связь, не зависящая от компьютера · ещё 4</li><li>Массовые аудио- и видеовстречи · ещё 3</li><li>Информационный портал со справочной информацией о сотрудниках · ещё 2</li><li>Корпоративный мессенджер: текст, файлы, видео · ещё 4</li></ul>
+            </details>            <details class="branch">
+              <summary>Интеграция &quot;Инстеп&quot; в единый контур управления ЭНКО (Четыркин Иван)</summary>
+              <ul><li>Расширена ресурсная база ИТ за счёт интеграции в единый контур управления ДИТ ИТ подразделения ИНСТЕП · ещё 2</li><li>ИТ-инфраструктура ИНСТЕП интегрирована в единую ИТ-инфраструктуру компании для обеспечения единых стандартов ИТ и ИБ и минимизации операционных расходов на поддержание смешанных сред · ещё 3</li><li>Организован общий безопасный контур коммуникаций, соответствующий стандартам компании · ещё 3</li><li>Пользователи работают в единых системах в рамках общих бизнес-процессов и функций для повышения операционной эффективности и минимизации ошибок, связанных с синхронизацией данных между системами · ещё 4</li></ul>
+            </details>
+        </section>        <section class="panel" id="panel-hrm">
+          <div class="section-head">
+            <div>
+              <h2>HRM (0.02 млрд)</h2>
+              <p>Исходная карта · `HRM (0.02 млрд).xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Развитие корпоративного портала</summary>
+              <ul><li>Разработка модуля &quot;Банк идей&quot;</li><li>Разработка модуля &quot;Модуль опросов&quot;</li><li>Развертывание Talant Management System Websoft, интеграция части функциональности с корп порталом</li><li>Наполнение Talant Management System матрицами компетенций, knowledge base и тренингами</li><li>Внедрение КЭДО</li><li>Разработка автоматизированной таблицы ФОТ</li><li>Разработать и внедрить Модули: управления проектами, time sheets</li><li>Интеграция с ChatGPT</li><li>Разработка Мобильного приложения</li><li>Вывод продукта на коммерческий рынок</li></ul>
+            </details>            <details class="branch">
+              <summary>Построена система управления персоналом, которая позволяет привлекать и удерживать сотрудников, создавать эффективную мотивированную и лояльную команду</summary>
+              <ul><li>Процессов привлечения, подбора и найма сотрудников · ещё 4</li><li>Процессов онбординга и адаптации сотрудников · ещё 3</li><li>Развивая корпоративную культуру компании и увеличивая вовлеченность сотрудников · ещё 4</li><li>Обучения и развития сотрудников · ещё 3</li><li>Процессов оценки эффективности сотрудников · ещё 4</li><li>Процессов укрепления бренда работодателя · ещё 3</li><li>Процессов оффбординга и высвобождения · ещё 4</li></ul>
+            </details>            <details class="branch">
+              <summary>Принятие управленческих решений в HR-департаменте осуществляется на основе достоверных, объективных и чистых данных.</summary>
+              <ul><li>Принятие управленческих решений осуществляется на основе чистых данных через упрощение подготовки аналитических данных и формирование отчетности · ещё 3</li></ul>
+            </details>            <details class="branch">
+              <summary>Построена система обеспечивающая эффекивное взаимодейтвие HR департамента с руководителями других подразделений</summary>
+              <ul><li>По вопросам планирования потребностей департаментов · ещё 2</li><li>Создания задач и целей для каждого сотрудника</li></ul>
+            </details>            <details class="branch">
+              <summary>Построена современная система управления взаимодействиями с регуляторами</summary>
+              <ul><li>Ведения и учета трудовых книжек сотрудников</li><li>Ведения кадрового учета</li><li>Ведения архива документов</li><li>Ведения воинского учета</li></ul>
+            </details>            <p class='tile' style='padding:.7rem 0;box-shadow:none;border:0'>Построена современная система управления взаимодействиями с кадровыми агентствами</p>            <details class="branch">
+              <summary>Выстроено управление функции охраны труда (Никитина Екатерина) Заказчик:Романова Анастасия</summary>
+              <ul><li>Обеспечить исполнение требований регуляторов ,в части охраны труда · ещё 1</li></ul>
+            </details>            <details class="branch">
+              <summary>Talant management system</summary>
+              <ul><li>Внедрение комплексной единой системы управления жизненным циклом сотрудника, где у каждого сотрудника и руководителя есть личный кабинет с набором функциональностей · ещё 10</li></ul>
+            </details>
+        </section>        <section class="panel" id="panel-is">
+          <div class="section-head">
+            <div>
+              <h2>Information Security</h2>
+              <p>Исходная карта · `Information Security.xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Внедрить базовый институт обеспечения ИБ</summary>
+              <ul><li>Определить необходимое количество специалистов и бюджет для обеспечения Информационной Безопасности</li><li>Согласовать бюджет и ресурсы на инвестиционном комитете</li><li>Нанять ИТ специалистов</li><li>Разработать / актуализировать руководства, процедуры и стандарты по Информационной Безопасности для сотрудников</li><li>Разработать систему регулярного обучения Информационной Безопасности для всех сотрудников</li><li>Разработать матрицу рисков и план по их митигации</li><li>Согласовать на стратегическом уровне практику внешнего аудита</li></ul>
+            </details>            <details class="branch">
+              <summary>Обеспечена защита от утечки конфиденциальных данных или причинение вреда ИТ инфраструктуре в результате преднамеренных или случайных действий внешних или внутренних нарушителей (Кулибаба А.С.)</summary>
+              <ul><li>Защита от внутренних нарушителей · ещё 5</li><li>Защита от внешних злоумышленников · ещё 3</li><li>Восстановление данных: резервное копирование и резервный ЦОД · ещё 2</li><li>Выполнение требований регуляторов по защите ПДн · ещё 5</li><li>Непрерывность управления изменениями в контуре ПДн</li></ul>
+            </details>
+        </section>        <section class="panel" id="panel-pm">
+          <div class="section-head">
+            <div>
+              <h2>Project Management</h2>
+              <p>Исходная карта · `PM.xmind`, `Project Management new.mmap`, `Project Management new.xmind`, `Project Management.mmap`, `Project Management.xmind`</p>
+            </div>
+          </div>
+                      <details class="branch">
+              <summary>Разработать и внедрить систему проектного управления</summary>
+              <ul><li>Сформировать рабочие группы по проекта, обеспечить работу команд · ещё 7</li><li>Внедрить сквозную систему календарного планирования · ещё 8</li><li>Разработать и внедрить систему отчетности и мониторинга · ещё 13</li><li>Внедрение интегрированной отчетности · ещё 5</li><li>Разработка и внедрение системы управления проектными рисками · ещё 7</li><li>Провести обучение проектному управлению · ещё 2</li></ul>
+            </details>            <details class="branch">
+              <summary>Формирование процессно-проектной модели бизнеса</summary>
+              <ul><li>Трансформация бизнес-процессов, переход с as is на to be/паллиатив · ещё 2</li></ul>
+            </details>            <details class="branch">
+              <summary>Управление портфелем проектов (сначала формируем управление проектами потом идем в формирование проектов)</summary>
+              <ul><li>Обеспечить команду ресурсами - методолог проектного офиса</li><li>Разработать и внедрить процесс оценки и утверждения проекта</li><li>Разработать отчетность для отслеживания статуса реализации проектов и эффектов от реализованных проектов</li><li>Сформировать четкие критерии выбора и оценки ИТ-проекта</li><li>Сформировать план внедрения наиболее приоритетных внутренних ИТ-инструментов и процедур для повышения эффективности функциональных подразделений</li><li>Формирование модели проектного офиса ИТ</li></ul>
+            </details>            <details class="branch">
+              <summary>Выстроен системный подход к управлению проектной деятельностью, который обеспечивает достижение целей проектов в установленные сроки и бюджет. (Колмакова Ольга)</summary>
+              <ul><li>Выстроен процесс управления инициализацией проектов · ещё 4</li><li>Выстроен процесс управления планированием проектов · ещё 5</li><li>Выстроены процессы управления исполнением и контролем · ещё 5</li><li>Выстроен процесс управления завершением проекта · ещё 5</li></ul>
+            </details>            <details class="branch">
+              <summary>Проектная деятельность автоматизирована (Кулибаба Александр)</summary>
+              <ul><li>Сформирован полный и согласованный перечень требований, отражающий реальные потребности пользователей и бизнес-процессов. Все заинтересованные стороны понимают, что будет реализовано. · ещё 3</li><li>Определено и утверждено программное решение, проведена его доработка (при необходимости), подготовлена инфраструктура для внедрения. · ещё 3</li><li>Система автоматизации проектного управления полностью настроена, интегрирована с другими корпоративными системами, обеспечен обмен данными. · ещё 5</li><li>Все необходимые данные корректно перенесены, пользователи имеют доступ к актуальной информации в новой системе. · ещё 3</li><li>Пользователи уверенно работают с системой, выявлены и устранены возможные проблемы на пилотных проектах, получена обратная связь для доработки. · ещё 4</li><li>Система автоматизации проектного управления используется во всех релевантных подразделениях, процессы стали прозрачными, управляемыми и эффективными, пользователи получают поддержку и обновления. · ещё 3</li></ul>
+            </details>
+        </section>
+      </main>
     </div>
-  </footer>
+  </div>
+  <script>
+    function activatePanel(id) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + id));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.panel === id));
+      const chipMap = { overview: "overview", goals: "goals", matrix: "matrix", ddd: "ddd", ess: "ddd", esd: "ddd", hrm: "ddd", is: "ddd", pm: "ddd" };
+      const chipId = chipMap[id] || null;
+      document.querySelectorAll(".chip[data-jump]").forEach(c => c.classList.toggle("active", chipId !== null && c.dataset.jump === chipId));
+      const stage = document.querySelector(".stage");
+      if (stage) stage.scrollTop = 0;
+    }
+    document.querySelectorAll(".nav-btn, [data-panel]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.panel;
+        if (id) activatePanel(id);
+      });
+    });
+    document.querySelectorAll(".chip[data-jump]").forEach(chip => {
+      chip.addEventListener("click", () => activatePanel(chip.dataset.jump));
+    });
+  </script>
 </body>
 </html>
