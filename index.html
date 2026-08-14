@@ -720,7 +720,6 @@
     .map-body { padding: 0 1.1rem 1rem; }
     details.branch { margin: 0 0 .45rem; }
     details.branch > summary { cursor: pointer; padding: .35rem 0; font-weight: 700; color: var(--navy); }
-    a.tool-btn { display: inline-flex; align-items: center; text-decoration: none; }
     .map-body ul { padding-left: 1.1rem; margin: .35rem 0 .7rem; }
     .map-body li { font-size: .86rem; color: #405061; margin: 0 0 .3rem; }
     .core { color: var(--blue); font-weight: 800; }
@@ -731,6 +730,28 @@
       border-radius: 16px; padding: 1rem 1.1rem; color: #405061; font-size: .9rem;
       margin-bottom: 1.1rem;
     }
+    .goals-stack { display: grid; gap: 1rem; }
+    .cut {
+      margin-top: .85rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #F7F9FC;
+    }
+    .cut > summary {
+      cursor: pointer;
+      padding: .7rem .9rem;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+    .cut-body { padding: 0 .9rem .85rem; }
+    .cut-group { margin: 0 0 .75rem; }
+    .cut-group .label { margin-bottom: .35rem; }
+    .cut-group ul { padding-left: 1.05rem; margin: 0; }
+    .cut-group li { font-size: .84rem; color: #405061; margin: 0 0 .28rem; line-height: 1.4; }
+    a.tool-btn { display: inline-flex; align-items: center; text-decoration: none; }
 
   </style>
 </head>
@@ -824,54 +845,214 @@
             </div>
           </div>
           <div class="notice">Карты не заменяют рост продаж, продуктовую стратегию ЖК и финансовую стратегию капитала. Они дают контур, без которого эту стратегию нельзя стабильно исполнять.</div>
-          <div class="grid-2">
+          <div class="goals-stack">
             <article class="tile">
               <div class="label">01 · PM · Embedded</div>
               <h3>Проекты в срок и в бюджет</h3>
               <p>Девелоперский портфель закрывается по графику и лимиту: сроки ИРД, ПД/РД, СМР и ввода предсказуемы, отклонения видны до факта срыва.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: PM, Embedded · Вклад: DDD</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 9</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">PM · ядро</div>
+            <ul><li>Выстроен системный подход к управлению проектной деятельностью, который обеспечивает достижение целей проектов в установленные сроки и бюджет</li><li>Разработать и внедрить систему проектного управления: сквозное календарное планирование с критическим путём по ИРД, проектированию, стройке, ЗОС и РнВ</li><li>Разработать и внедрить систему отчётности и мониторинга, ежемесячный факторный анализ бюджета</li><li>Проектная деятельность автоматизирована (Jira)</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">Embedded · ядро</div>
+            <ul><li>Выстроено управление бизнес-процессами строительства жилых комплексов: ГПР/ГПТ и бюджет план/факт в 1С УСО</li><li>Внедрена система документооборота с проектировщиками: контрольные точки КСМ по объёму работ</li><li>Внедрить инструмент автоматизированного планирования и обмена данными для внутренних и внешних стейкхолдеров</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">DDD · вклад</div>
+            <ul><li>Формирование дашбордов в интересах функций и для LEAN</li><li>Внедрение Data Driven подхода: качество данных для управленческих отчётов</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">02 · Embedded · PM</div>
               <h3>Управляемый полный цикл</h3>
               <p>Компания работает как процессно-проектная модель: стратегия → проект → тендер → стройка → приёмка → ключи → продажи.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: Embedded, PM · Вклад: DDD, ESD</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 7</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">Embedded · ядро</div>
+            <ul><li>Выстроен единый центр делопроизводства, который отвечает за бумажный и ЭДО документооборот компании</li><li>Выстроено управление бизнес-процессами строительства жилых комплексов: конфигурация 1С УСО под девелопмент полного цикла</li><li>Цифровизация закупок и поставок: единая ИТ-платформа, связка с тендерами</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">PM · ядро</div>
+            <ul><li>Формирование процессно-проектной модели бизнеса: связки «Стратеги — ПУ — СЗ — Тендерный» и «Стройка — приёмка — ключи — продажи»</li><li>Разработать и внедрить систему проектного управления: матрицы ответственности ПИР и строительства</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">DDD · вклад</div>
+            <ul><li>Внедрение MDM системы и корпоративной сервисной шины (ESB)</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">ESD · вклад</div>
+            <ul><li>Организовано внутреннее информационное пространство, обеспечивающее эффективные и безопасные коммуникации</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">03 · DDD</div>
               <h3>Управление на данных</h3>
               <p>Решения инвесткомитета, функций и HR принимаются по доверенным витринам: единая объектная модель и связанная аналитика.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: DDD · Вклад: PM, HRM, Embedded</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 8</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">DDD · ядро</div>
+            <ul><li>Формирование корпоративной архитектуры данных: CDE, MDM, ESB, портфель ИТ-проектов</li><li>Развитие корпоративной системы стратегического анализа и DDM, Data Quality, внешние источники</li><li>Формирование дашбордов</li><li>Внедрение Data Driven подхода: объектная модель, глоссарий, качество данных, аналитическая культура</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">PM · вклад</div>
+            <ul><li>Разработать и внедрить систему отчётности и мониторинга: дашборд портфеля «проект → стратегическая цель»</li><li>Внедрение интегрированной отчётности</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">HRM · вклад</div>
+            <ul><li>Принятие управленческих решений в HR-департаменте осуществляется на основе достоверных, объективных и чистых данных</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">Embedded · вклад</div>
+            <ul><li>Выстроено управление бизнес-процессами строительства: план/факт ГПР, ГПТ и бюджета как первичный контур факта</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">04 · ESD</div>
               <h3>Единый контур ЭНКО</h3>
               <p>Новые юрлица, объекты и периметр Инстеп входят в те же стандарты IT, ИБ, HR и проектного управления.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: ESD · Вклад: Embedded, HRM, DDD, ИБ, PM</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 6</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">ESD · ядро</div>
+            <ul><li>Интеграция «Инстеп» в единый контур управления ЭНКО: IT-инфраструктура, коммуникации, HelpDesk и SLA, снижение OPEX смешанных сред</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">Embedded · вклад</div>
+            <ul><li>Выстроено управление бизнес-процессами строительства: переход в пром на ПРЕО, Айвазовский, МЫС</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">HRM · вклад</div>
+            <ul><li>Talant management system: подключение в систему новых компаний</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">DDD · вклад</div>
+            <ul><li>Внедрение MDM системы: единые справочники объекта, контрагента, сотрудника</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">ИБ · вклад</div>
+            <ul><li>Внедрить базовый институт обеспечения ИБ — единые стандарты на присоединённый периметр</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">PM · вклад</div>
+            <ul><li>Проектная деятельность автоматизирована: система масштабирована на все релевантные подразделения</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">05 · Embedded</div>
               <h3>Себестоимость и подрядчики</h3>
               <p>Закупки, поставки и проектирование дают меньше потерь: рейтинг подрядчиков, качественная ПД/РД, лимиты бюджета.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: Embedded · Вклад: PM, DDD</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 6</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">Embedded · ядро</div>
+            <ul><li>Внедрена система документооборота и коммуникации с подрядчиками по проектированию: рейтинг, качественная ПД/РД, ЭДО</li><li>Цифровизация закупок и поставок: единая ИТ-платформа, интеграция с MDM</li><li>Выстроено управление бизнес-процессами строительства: автоконтроль лимитов закупок и договоров в УСО</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">PM · вклад</div>
+            <ul><li>Разработать и внедрить систему проектного управления: шаблоны графиков закупок и поставок, аналитика закупок</li><li>Разработка и внедрение системы управления проектными рисками</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">DDD · вклад</div>
+            <ul><li>Внедрение MDM системы: справочники контрагентов, интеграция с Macro CRM и экосистемой</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">06 · HRM</div>
               <h3>Люди и компетенции</h3>
               <p>Мотивация, грейды и обучение связаны со стратегией, а не живут отдельно от проектов.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: HRM · Вклад: PM, ESD</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 6</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">HRM · ядро</div>
+            <ul><li>Построена система управления персоналом: подбор, онбординг, развитие, оценка, бренд работодателя, оффбординг</li><li>Talant management system: матрицы компетенций, ассессмент, 9-box, ИПР, мотивация под стратегические цели</li><li>Развитие корпоративного портала: банк идей, опросы, TMS, КЭДО</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">PM · вклад</div>
+            <ul><li>Провести обучение проектному управлению, загрузить программы в TMS</li><li>Мотивация участников проекта в привязке к целям и этапам проекта</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">ESD · вклад</div>
+            <ul><li>Трансформация ИТ-поддержки: портал заявок, линии поддержки, SLA</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">07 · ИБ</div>
               <h3>Защита и непрерывность</h3>
               <p>Утечка данных, простой инфраструктуры и претензии регуляторов не останавливают стройку и контур управления.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: ИБ · Вклад: ESD, HRM</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 6</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">ИБ · ядро</div>
+            <ul><li>Внедрить базовый институт обеспечения ИБ: штат, регламенты, обучение, матрица рисков, внешний аудит</li><li>Обеспечена защита от утечки конфиденциальных данных: внутренние и внешние нарушители, резервное копирование, ПДн</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">ESD · вклад</div>
+            <ul><li>Организовано внутреннее информационное пространство: безопасные коммуникации и контроль информации за периметром</li><li>Интеграция «Инстеп»: единые стандарты ИБ на присоединённый периметр</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">HRM · вклад</div>
+            <ul><li>Выстроено управление функции охраны труда</li><li>Построена современная система управления взаимодействиями с регуляторами: кадровый учёт, архив, воинский учёт</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
             <article class="tile">
               <div class="label">08 · ESD · HRM</div>
               <h3>Цифровое рабочее место</h3>
               <p>Почта, календарь, мессенджер, портал, HelpDesk и ЭДО — в одном контуре с понятным SLA.</p>
               <p style="margin-top:.55rem"><span class="pill">Ядро: ESD, HRM · Вклад: Embedded, ИБ</span></p>
+          <details class="cut">
+            <summary>Цели из карт департамента · 6</summary>
+            <div class="cut-body">
+          <div class="cut-group">
+            <div class="label">ESD · ядро</div>
+            <ul><li>Трансформация ИТ-поддержки: 3 внутренние линии + 4-я, приоритизация, портал заявок</li><li>Организовано внутреннее информационное пространство: почта, календарь, мессенджер, голосовая связь, видеовстречи</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">HRM · ядро</div>
+            <ul><li>Развитие корпоративного портала: банк идей, опросы, TMS, мобильное приложение, ChatGPT</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">Embedded · вклад</div>
+            <ul><li>Выстроен единый центр делопроизводства: бумажный и ЭДО документооборот</li><li>Внедрена система документооборота с проектировщиками: единое пространство обмена документацией</li></ul>
+          </div>
+          <div class="cut-group">
+            <div class="label">ИБ · вклад</div>
+            <ul><li>Обеспечена защита от утечки конфиденциальных данных: контроль доступа и защита каналов</li></ul>
+          </div>
+            </div>
+          </details>
             </article>
           </div>
         </section>
