@@ -2,6 +2,8 @@
 
 Карты целей департамента и каскад к стратегическим целям компании.
 
+Сайт: [https://anufrievpg.github.io/OKR/](https://anufrievpg.github.io/OKR/)
+
 ## Исходные карты
 
 Оригиналы XMind / MindManager лежат в [`MM/`](./MM). Читаемое дерево (уровни 1–2) — в [`MM/README.md`](./MM/README.md).
