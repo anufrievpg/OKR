@@ -16,4 +16,4 @@
 | HRM | `MM/HRM (0.02 млрд).xmind` |
 | Information Security | `MM/Information Security.xmind` |
 | Project Management | `MM/PM.xmind`<br>`MM/Project Management new.mmap`<br>`MM/Project Management new.xmind`<br>`MM/Project Management.mmap`<br>`MM/Project Management.xmind` |
-| ОБИТИ | часть департамента · формулировка целей через DDD, УСЦ, HRM, PM |
+| Цели ОБИТИ | каскад С / Т / О · DDD, УСЦ, HRM, PM |
