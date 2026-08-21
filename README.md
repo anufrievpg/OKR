@@ -16,3 +16,4 @@
 | HRM | `MM/HRM (0.02 млрд).xmind` |
 | Information Security | `MM/Information Security.xmind` |
 | Project Management | `MM/PM.xmind`<br>`MM/Project Management new.mmap`<br>`MM/Project Management new.xmind`<br>`MM/Project Management.mmap`<br>`MM/Project Management.xmind` |
+| Проекты ДИТ | `MM/Проекты ДИТ (1).xmind` |
