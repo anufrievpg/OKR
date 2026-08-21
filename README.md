@@ -17,3 +17,4 @@
 | Information Security | `MM/Information Security.xmind` |
 | Project Management | `MM/PM.xmind`<br>`MM/Project Management new.mmap`<br>`MM/Project Management new.xmind`<br>`MM/Project Management.mmap`<br>`MM/Project Management.xmind` |
 | Проекты ДИТ | `MM/Проекты ДИТ (1).xmind` |
+| ОБИТИ | концепт подразделения · стратегические / тактические / операционные цели 2026–2027 |
